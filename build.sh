@@ -19,13 +19,6 @@ function buildFont {
     rm temp.ttf
 }
 
-rm *.bdf
-rm *.sfd
-rm *.ttf
-rm *.otf
-rm *.woff
-rm *.woff2
-
 buildFont "src/lstar-eng.fnt" "src/lstar-han.fnt" "Lstar_6x2x1"
 buildFont "src/wordcomm-eng.fnt" "src/wordcomm-han.fnt" "Wordcomm_6x2x1"
 buildFont "src/woori-eng.fnt" "src/woori-han.fnt" "Woori_6x2x1"
