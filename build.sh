@@ -9,6 +9,7 @@ function exec_bitsnpicas {
 }
 
 function buildFont {
+    rm "./fonts/$3*"
     node fnt2bdf.js "$1" "$2" "$3.bdf"
     exec_bitsnpicas convertbitmap -f ttf -o temp.ttf "$3.bdf"
     exec_fontforge --script generate_hangul_syllables.py "$3"
