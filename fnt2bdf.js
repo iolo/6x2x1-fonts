@@ -7,6 +7,26 @@ const CP437_TO_UNICODE = require('./cp437_to_unicode.json');
 //const PUA = 0xe010; 
 const PUA = 0xf600;
 
+function reverseBits(byte, ignoreHalfDot) {
+  if (ignoreHalfDot) {
+        return ((byte & 0x40) >> 5)
+          | ((byte & 0x20) >> 3)
+          | ((byte & 0x10) >> 1)
+          | ((byte & 0x08) << 1)
+          | ((byte & 0x04) << 3)
+          | ((byte & 0x02) << 5)
+          | ((byte & 0x01) << 7);
+  }
+  return ((byte & 0x80) >> 7)
+    | ((byte & 0x40) >> 5)
+    | ((byte & 0x20) >> 3)
+    | ((byte & 0x10) >> 1)
+    | ((byte & 0x08) << 1)
+    | ((byte & 0x04) << 3)
+    | ((byte & 0x02) << 5)
+    | ((byte & 0x01) << 7);
+}
+
 function generateGlyphs({ fileName, glyphWidth, glyphHeight, glyphCount, codeMapper }) {
   const result = [];
   const glyphData = fs.readFileSync(fileName);
@@ -23,6 +43,22 @@ function generateGlyphs({ fileName, glyphWidth, glyphHeight, glyphCount, codeMap
     result.push(`BBX ${glyphWidth} ${glyphHeight} ${-glyphDescent}`);
     result.push(`BITMAP`);
     // column first
+    // ex. glyphWidthBytes=2, glyphHeight=3
+    // 0 3
+    // 1 4
+    // 2 5
+    for (let y = 0; y < glyphHeight; y++) {
+      const hex = [];
+      for (let x = 0; x < glyphWidthBytes; x++) {
+        const byte = reverseBits(glyphData[(offset + y) + (x * glyphHeight)], x & 0x01);
+        hex.push(byte.toString(16).toUpperCase().padStart(2, '0'));
+      }
+      result.push(hex.join(''));
+    }
+    // next glyph
+    offset += glyphWidthBytes * glyphHeight;
+    /*
+    // column first
     const hex = [];
     for (let y = 0; y < glyphHeight; y++) {
       hex[y] = [];
@@ -31,7 +67,7 @@ function generateGlyphs({ fileName, glyphWidth, glyphHeight, glyphCount, codeMap
       for (let y = 0; y < glyphHeight; y++) {
         const byte = glyphData[offset++];
         // reverse bit
-        const rev = ((byte & 0x80) >> 7)
+        let rev = 0 //((byte & 0x80) >> 7) // ignore apple2's half-dot shift
           | ((byte & 0x40) >> 5)
           | ((byte & 0x20) >> 3)
           | ((byte & 0x10) >> 1)
@@ -39,12 +75,17 @@ function generateGlyphs({ fileName, glyphWidth, glyphHeight, glyphCount, codeMap
           | ((byte & 0x04) << 3)
           | ((byte & 0x02) << 5)
           | ((byte & 0x01) << 7);
+        if (x & 0x01) {
+          // even column
+          rev <<= 1;
+        }
         hex[y].push(rev.toString(16).toUpperCase().padStart(2, '0'));
       }
     }
     for (let y = 0; y < glyphHeight; y++) {
       result.push(hex[y].join(''));
     }
+    */
     result.push(`ENDCHAR`);
   }
   return result.join('\n');
