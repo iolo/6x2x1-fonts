@@ -7,9 +7,9 @@ name = sys.argv[1]
 
 f = fontforge.open('temp.ttf')
 
-NUM_CHO = 19 # no filler
-NUM_JUNG = 21 # no filler
-NUM_JONG = 27 # no filter
+NUM_CHO = 19
+NUM_JUNG = 21
+NUM_JONG = 27+1
 
 CHO_KIND = 6
 JUNG_KIND = 2
@@ -28,69 +28,50 @@ KOR = 0xac00
 # https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points
 PUA = 0xf600
 
-PUA_FILL = PUA
-PUA_JUNG = PUA + 1
-PUA_CHO = PUA_JUNG + NUM_JUNG * JUNG_KIND
-PUA_JONG = PUA_CHO + NUM_CHO * CHO_KIND
+PUA_CHO = PUA
+PUA_CHO_SIZE = (NUM_CHO + 1) * CHO_KIND
+PUA_JUNG = PUA_CHO + PUA_CHO_SIZE
+PUA_JUNG_SIZE = (NUM_JUNG + 1) * JUNG_KIND
+PUA_JONG = PUA_JUNG + PUA_JUNG_SIZE
+PUA_JONG_SIZE = (NUM_JONG) * JONG_KIND
 
 #                        ㅏ ㅐ ㅑ ㅒ ㅓ ㅔ ㅕ ㅖ ㅗ ㅘ ㅙ ㅚ ㅛ ㅜ ㅝ ㅞ ㅟ ㅠ ㅡ ㅢ ㅣ
 cho_kind_without_jong = [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 0];
 cho_kind_with_jong    = [3, 3, 3, 3, 3, 3, 3, 3, 4, 5, 5, 5, 4, 4, 5, 5, 5, 4, 4, 5, 3];
 
-#             ㄱ ㄲ ㄴ ㄷ ㄸ ㄹ ㅁ ㅂ ㅃ ㅅ ㅆ ㅇ ㅈ ㅉ ㅊ ㅋ ㅌ ㅍ ㅎ
-#             ㄱ ㅁ ㅂ ㅅ ㅌ ㅍ ㅎ ㅈ ㄴ ㄷ ㄹ ㅇ ㅊ ㅋ ㄲ ㅆ ㄸ ㅃ ㅉ
-#              0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18
-cho_glyphs = [ 0,14, 8, 9,16,10, 1, 2,17, 3,15,11, 7,18,12,13, 4, 5, 6]
-#              ㅏ ㅐ ㅑ ㅒ ㅓ ㅔ ㅕ ㅖ ㅗ ㅘ ㅙ ㅚ ㅛ ㅜ ㅝ ㅞ ㅟ ㅠ ㅡ ㅢ ㅣ
-#              ㅏ ㅐ ㅣ ㅓ ㅔ ㅑ ㅕ ㅒ ㅖ ㅗ ㅛ ㅜ ㅠ ㅡ ㅘ ㅙ ㅚ ㅟ ㅝ ㅞ ㅢ
-#               0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20
-jung_glyphs = [ 0, 1, 5, 7, 3, 4, 6, 8, 9,14,15,16,10,11,18,19,17,12,13,20, 2]
-#              ㄱ ㄲ ㄳ ㄴ ㄵ ㄶ ㄷ ㄹ ㄺ ㄻ ㄼ ㄽ ㄾ ㄿ ㅀ ㅁ ㅂ ㅄ ㅅ ㅆ ㅇ ㅈ ㅊ ㅋ ㅌ ㅍ ㅎ
-#              ㄱ ㅁ ㅂ ㅅ ㅌ ㅍ ㅎ ㅈ ㄴ ㄷ ㄹ ㅇ ㅊ ㅋ ㄲ ㅆ ㄳ ㄵ ㄶ ㄺ ㄻ ㄼ ㄽ ㄾ ㄿ ㅀ ㅄ
-#               0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
-jong_glyphs = [ 0,14,16, 8,17,18, 9,10,19,20,21,22,23,24,25, 1, 2,26, 3,15,11, 7,12,13, 4, 5, 6];
-
 code = JAMO_CHO
-for cho in range(NUM_CHO):
+for cho in range(1,NUM_CHO):
     c = f.createChar(code)
-    c.addReference(fontforge.nameFromUnicode(PUA_CHO + cho_glyphs[cho]))
+    c.addReference(fontforge.nameFromUnicode(PUA_CHO + cho))
     code += 1
 
 code = JAMO_JUNG
-for jung in range(NUM_JUNG):
+for jung in range(1,NUM_JUNG):
     c = f.createChar(code)
-    c.addReference(fontforge.nameFromUnicode(PUA_JUNG + jung_glyphs[jung]))
+    c.addReference(fontforge.nameFromUnicode(PUA_JUNG + jung))
     code += 1
 
 code = JAMO_JONG
-for jong in range(NUM_JONG):
+for jong in range(1,NUM_JONG):
     c = f.createChar(code)
-    c.addReference(fontforge.nameFromUnicode(PUA_JONG + jong_glyphs[jong]))
+    c.addReference(fontforge.nameFromUnicode(PUA_JONG + jong))
     code += 1
 
 code = KOR
 for cho in range(NUM_CHO):
     for jung in range(NUM_JUNG):
-        # without jong
-        #print(f'cho={cho},jung={jung}->code={code:04x},char={chr(code)}')
-        cho_kind = cho_kind_without_jong[jung];
-        jung_kind = 0
-        jong_kind = 0
-        cho_code = PUA_CHO + NUM_CHO * cho_kind + cho_glyphs[cho]
-        jung_code = PUA_JUNG + NUM_JUNG * jung_kind + jung_glyphs[jung]
-        c = f.createChar(code)
-        c.addReference(fontforge.nameFromUnicode(cho_code))
-        c.addReference(fontforge.nameFromUnicode(jung_code))
-        code += 1
         for jong in range(NUM_JONG):
-            # without jong
-            #print(f'cho={cho},jung={jung},jong={jong}->code={code:04x},char={chr(code)}')
-            cho_kind = cho_kind_with_jong[jung];
-            jung_kind = 1
+            if jong == 0: # no jonseong
+                cho_kind = cho_kind_without_jong[jung];
+                jung_kind = 0
+            else: # has jongseong
+                cho_kind = cho_kind_with_jong[jung];
+                jung_kind = 1
             jong_kind = 0
-            cho_code = PUA_CHO + NUM_CHO * cho_kind + cho_glyphs[cho]
-            jung_code = PUA_JUNG + NUM_JUNG * jung_kind + jung_glyphs[jung]
-            jong_code = PUA_JONG + NUM_JONG * jong_kind + jong_glyphs[jong]
+            cho_code = PUA_CHO + (NUM_CHO + 1) * cho_kind + cho + 1 #unicode choseong has no filler
+            jung_code = PUA_JUNG + (NUM_JUNG + 1) * jung_kind + jung + 1 # unicode jungseong has no filler
+            jong_code = PUA_JONG + NUM_JONG * jong_kind + jong # unicode jongseong already has filler
+            #print(f'cho={cho},jung={jung},jong={jong}->code={code:04x},char={chr(code)}')
             c = f.createChar(code)
             c.addReference(fontforge.nameFromUnicode(cho_code))
             c.addReference(fontforge.nameFromUnicode(jung_code))
