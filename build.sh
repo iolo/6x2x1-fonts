@@ -19,7 +19,11 @@ function buildFont {
     rm temp.ttf
 }
 
-buildFont "lstar-eng.fnt" "lstar-han.fnt" "Lstar_6x2x1"
-buildFont "wordcomm-eng.fnt" "wordcomm-han.fnt" "Wordcomm_6x2x1"
-buildFont "woori-eng.fnt" "woori-han.fnt" "Woori_6x2x1"
-buildFont "romax-eng.fnt" "romax-han.fnt" "Romax_6x2x1"
+buildFont "asc_hlink.fnt" "han_hlink.fnt" "Hlink_6x2x1"
+buildFont "asc_mr128.fnt" "han_hgkey.fnt" "Hgkey_6x2x1"
+buildFont "asc_mr128.fnt" "han_joong.fnt" "Joong_6x2x1"
+buildFont "asc_mr128.fnt" "han_mr128.fnt" "Mr128_6x2x1"
+buildFont "asc_romax.fnt" "han_romax.fnt" "Romax_6x2x1"
+buildFont "asc_scrn9.fnt" "han_scrn9.fnt" "Scrn9_6x2x1"
+buildFont "asc_wcomm.fnt" "han_wcomm.fnt" "Wcomm_6x2x1"
+buildFont "asc_woori.fnt" "han_woori.fnt" "Woori_6x2x1"
