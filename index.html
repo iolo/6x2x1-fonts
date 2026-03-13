@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
+    <meta viewport="width=device-width, initial-scale=1" />
     <title>6x2x1-fonts</title>
     <style>
       @font-face {
@@ -80,10 +81,9 @@
       h1 {
         font-size: 32px;
       }
-      p {
-        font-size: 16px;
-        line-height: 20px;
-        width: 20em;
+      #previewText {
+        font-size: 32px;
+        line-height: 1.5em;
         margin: 0 auto;
       }
     </style>
@@ -99,18 +99,27 @@
     </header>
     <article>
       <section>
-        <select>
-          <option>Choose Font</option>
-          <option>Hlink_6x2x1</option>
-          <option>Hgkey_6x2x1</option>
-          <option>Joong_6x2x1</option>
-          <option>Mr128_6x2x1</option>
-          <option>Romax_6x2x1</option>
-          <option>Scrn9_6x2x1</option>
-          <option>Wcomm_6x2x1</option>
-          <option>Woori_6x2x1</option>
-        </select>
-        <p>
+        <form>
+          <select id="fontSelect">
+            <option value="">글꼴</option>
+            <option>Hlink_6x2x1</option>
+            <option>Hgkey_6x2x1</option>
+            <option>Joong_6x2x1</option>
+            <option>Mr128_6x2x1</option>
+            <option>Romax_6x2x1</option>
+            <option>Scrn9_6x2x1</option>
+            <option>Wcomm_6x2x1</option>
+            <option>Woori_6x2x1</option>
+          </select>
+          <select id="sizeSelect">
+            <option value="">크기</option>
+            <option>16px</option>
+            <option>32px</option>
+            <option>48px</option>
+            <option>64px</option>
+          </select>
+        </form>
+        <p id="previewText">
           다람쥐 헌 쳇바퀴에 타고파<br />
           닭 콩팥 훔친 집사<br />
           물컵 속 팥 찾던 형<br />
@@ -146,15 +155,21 @@
     </footer>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const section = document.querySelector('section');
-        const select = document.querySelector('select');
-        select.addEventListener('change', () => {
-          section.style.fontFamily = select.value;
+        const fontSelect = document.querySelector('#fontSelect');
+        const sizeSelect = document.querySelector('#sizeSelect');
+        const previewText = document.querySelector('#previewText');
+        fontSelect.addEventListener('change', () => {
+          previewText.style.fontFamily = fontSelect.value;
+        });
+        sizeSelect.addEventListener('change', () => {
+          previewText.style.fontSize = sizeSelect.value;
         });
         const params = new URLSearchParams(location.search);
         if (params.has('font')) {
-          select.value = params.get('font');
-          section.style.fontFamily = select.value;
+          previewText.style.fontFamily = fontSelect.value = params.get('font');
+        }
+        if (params.has('size')) {
+          previewText.style.fontSize = sizeSelect.value = params.get('size');
         }
       });
     </script>
